@@ -5,7 +5,20 @@ import 'dart:convert';
 Future main() async {
 
   File file = File("lightData.json");
-  Map<dynamic, dynamic> fileData = json.decode(file.readAsStringSync());
+  Map<dynamic, dynamic> fileData;
+  try {
+    fileData = json.decode(file.readAsStringSync());
+  } 
+  catch (e) {
+    print("fileData is not happy with not exisiting: \n $e");
+  }
+  
+
+  if (fileData["color"] == null || fileData["power"] == null) {
+    file.createSync();
+    file.writeAsString('{"power" : false, "color" : 1}');
+    fileData = json.decode(file.readAsStringSync());
+  }
 
   int color = fileData["color"];
   bool power = fileData["power"];
@@ -23,7 +36,7 @@ Future main() async {
           if (data["color"] != null) { //if colors are specified then go ahead and run the script.
            
             color = int.parse(data["color"]); //sets the color varible to the queryParameters.
-            file.writeAsString(fileData.toString());
+            file.writeAsString(fileData.toString()); //When the data of a post reqeust is recived. Write it to the save file.
             print("colors gotten: $color");
             //Process.start("./lightscripts/lightswitch.py", ["${data["power"]}", "${data["r"]}", "${data["g"]}", "${data["b"]}"]);
           }
