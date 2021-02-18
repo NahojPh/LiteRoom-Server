@@ -38,7 +38,7 @@ Future main() async {
             color = int.parse(data["color"]); //sets the color varible to the queryParameters.
             file.writeAsString(fileData.toString()); //When the data of a post reqeust is recived. Write it to the save file.
             print("colors gotten: $color");
-            //Process.start("./lightscripts/lightswitch.py", ["${data["power"]}", "${data["r"]}", "${data["g"]}", "${data["b"]}"]);
+            //Process.start("./lightscripts/lightswitch.py", ["${data["power"]}", "${data["color"]}]);
           }
           else {
             request.response.write("Recived bad parameters: ${data}");
@@ -51,7 +51,7 @@ Future main() async {
             "power": power,
             "color": color,
           };
-          request.response.write(json.encode(body));
+          request.response.write(json.encode(body)); //json encodest he body and sends it as a response.
         } 
         else {
           request.response.statusCode = 400;
